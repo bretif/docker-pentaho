@@ -17,6 +17,12 @@ ENV PENTAHO_JAVA_HOME $JAVA_HOME
 RUN apt-get update \
 	&& apt-get install wget unzip git -y 
 
+#Set locale
+RUN dpkg-reconfigure locales && \
+    locale-gen C.UTF-8 && \
+    /usr/sbin/update-locale LANG=C.UTF-8
+
+ENV LC_ALL C.UTF-8
 
 # Download Pentaho BI Server
 RUN /usr/bin/wget -nv  http://ufpr.dl.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/5.2/biserver-ce-${BISERVER_TAG}.zip -O /tmp/biserver-ce-${BISERVER_TAG}.zip 
