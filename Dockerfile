@@ -1,54 +1,45 @@
 
 
-FROM wmarinho/ubuntu:oracle-jdk-7
+FROM java:7
 
 
 MAINTAINER Wellington Marinho wpmarinho@globo.com
 
 # Init ENV
-ENV BISERVER_TAG 5.3.0.0-213
+ENV BISERVER_VERSION 5.4
+ENV BISERVER_TAG 5.4.0.1-130
 
 ENV PENTAHO_HOME /opt/pentaho
 
 # Apply JAVA_HOME
 RUN . /etc/environment
 ENV PENTAHO_JAVA_HOME $JAVA_HOME
+ENV PENTAHO_JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
 
-RUN apt-get update \
-	&& apt-get install wget unzip git -y 
+# Install Dependences
+RUN apt-get update; apt-get install zip netcat -y; \
+    apt-get install wget unzip git postgresql-client-9.4 vim -y; \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+    curl -O https://bootstrap.pypa.io/get-pip.py; \
+    python get-pip.py; \
+    pip install awscli; \
+    rm -f get-pip.py
 
-# Set the locale
-RUN locale-gen en_US.UTF-8  
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
+RUN mkdir ${PENTAHO_HOME}; useradd -s /bin/bash -d ${PENTAHO_HOME} pentaho; chown pentaho:pentaho ${PENTAHO_HOME}
+
+USER pentaho
 
 # Download Pentaho BI Server
-#RUN /usr/bin/wget -nv  http://ufpr.dl.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/5.2/biserver-ce-${BISERVER_TAG}.zip -O /tmp/biserver-ce-${BISERVER_TAG}.zip 
-RUN usr/bin/wget -nv http://softlayer-ams.dl.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/5.3/biserver-ce-${BISERVER_TAG}.zip -O /tmp/biserver-ce-${BISERVER_TAG}.zip
-
-RUN /usr/bin/unzip -q /tmp/biserver-ce-${BISERVER_TAG}.zip -d  $PENTAHO_HOME
-RUN rm -f /tmp/biserver-ce-${BISERVER_TAG}.zip $PENTAHO_HOME/biserver-ce/promptuser.sh
-
-
-
-RUN rm -f /tmp/biserver-ce-${BISERVER_TAG}.zip
-
-ENV PENTAHO_JAVA_HOME /usr/lib/jvm/java-7-oracle
-ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
-
-
-RUN apt-get install postgresql-client-9.3 -y
-
-ADD config $PENTAHO_HOME/config
-ADD scripts $PENTAHO_HOME/scripts
-ADD scripts/run.sh /
-
-RUN sed -i -e 's/\(exec ".*"\) start/\1 run/' /opt/pentaho/biserver-ce/tomcat/bin/startup.sh &&\
+RUN /usr/bin/wget --progress=dot:giga http://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/${BISERVER_VERSION}/biserver-ce-${BISERVER_TAG}.zip -O /tmp/biserver-ce-${BISERVER_TAG}.zip; \
+    /usr/bin/unzip -q /tmp/biserver-ce-${BISERVER_TAG}.zip -d  $PENTAHO_HOME; \
+    rm -f /tmp/biserver-ce-${BISERVER_TAG}.zip $PENTAHO_HOME/biserver-ce/promptuser.sh; \
+    sed -i -e 's/\(exec ".*"\) start/\1 run/' $PENTAHO_HOME/biserver-ce/tomcat/bin/startup.sh; \
     chmod +x $PENTAHO_HOME/biserver-ce/start-pentaho.sh
 
-RUN apt-get install zip -y
+COPY config $PENTAHO_HOME/config
+COPY scripts $PENTAHO_HOME/scripts
 
-
+WORKDIR /opt/pentaho 
 EXPOSE 8080 
-CMD ["./run.sh"]
+CMD ["sh", "scripts/run.sh"]
