@@ -21,16 +21,16 @@ psql (PostgreSQL) 9.3.3
 ## Arquivos de configuração
 
 <pre>
- biserver-ce/data/postgresql/create_jcr_postgresql.sql
- biserver-ce/data/postgresql/create_quartz_postgresql.sql
- biserver-ce/data/postgresql/create_repository_postgresql.sql
- biserver-ce/pentaho-solutions/system/hibernate/hibernate-settings.xml
- biserver-ce/pentaho-solutions/system/hibernate/postgresql.hibernate.cfg.xml
- biserver-ce/pentaho-solutions/system/jackrabbit/repository.xml
- biserver-ce/pentaho-solutions/system/quartz/quartz.properties
- biserver-ce/pentaho-solutions/system/sessionStartupActions.xml
- biserver-ce/tomcat/webapps/pentaho/META-INF/context.xml
- biserver-ce/tomcat/webapps/pentaho/WEB-INF/web.xml
+ pentaho-server/data/postgresql/create_jcr_postgresql.sql
+ pentaho-server/data/postgresql/create_quartz_postgresql.sql
+ pentaho-server/data/postgresql/create_repository_postgresql.sql
+ pentaho-server/pentaho-solutions/system/hibernate/hibernate-settings.xml
+ pentaho-server/pentaho-solutions/system/hibernate/postgresql.hibernate.cfg.xml
+ pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
+ pentaho-server/pentaho-solutions/system/quartz/quartz.properties
+ pentaho-server/pentaho-solutions/system/sessionStartupActions.xml
+ pentaho-server/tomcat/webapps/pentaho/META-INF/context.xml
+ pentaho-server/tomcat/webapps/pentaho/WEB-INF/web.xml
 </pre>
 
 
@@ -68,7 +68,7 @@ git clone https://github.com/wmarinho/pentaho5.git
 ###Aplicar configurações do PostgreSQL
 
 <pre>
-cp -r config/postgresql/biserver-ce .
+cp -r config/postgresql/pentaho-server .
 </pre>
 
 ### Inicializar repositório
@@ -77,7 +77,7 @@ Usuários e senhas estão predefinidos nos arquivos *.sql.
 Para utilizar em produção, é recomendável a alteração em todos os arquivos. 
 
 <pre>
-cd biserver-ce/data/postgresql
+cd pentaho-server/data/postgresql
 </pre>
 
 <pre>
@@ -89,7 +89,7 @@ psql -U postgres -h localhost < create_jcr_postgresql.sql
 
 ### Inicializar Pentaho 
 <pre>
-cd /opt/pentaho/biserver-ce
+cd /opt/pentaho/pentaho-server
 ./start-pentaho.sh
 </pre>
 
