@@ -44,7 +44,7 @@ if [ "$PGHOST" ]; then
 
 	cp -r $PENTAHO_HOME/config $PENTAHO_HOME/config_tmp
 
-        rm -rf  "$PENTAHO_HOME/pentaho-server/tomcat/conf/Catalina/*" 
+#        rm -rf  "$PENTAHO_HOME/pentaho-server/tomcat/conf/Catalina/*" 
 	rm -rf  "$PENTAHO_HOME/pentaho-server/tomcat/temp/*" 
 	rm -rf	"$PENTAHO_HOME/pentaho-server/tomcat/work/*" 
 	rm -rf	"$PENTAHO_HOME/pentaho-server/tomcat/logs/*"
