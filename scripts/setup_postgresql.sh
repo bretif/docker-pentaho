@@ -35,12 +35,12 @@ if [ "$PGHOST" ]; then
 	CHK_QUARTZ=`echo "$(psql -U $PGUSER  -h $PGHOST -d $PGDATABASE -l | grep quartz | wc -l)"`
 	CHK_HIBERNATE=`echo "$(psql -U $PGUSER  -h $PGHOST -d $PGDATABASE -l | grep hibernate | wc -l)"`
 	CHK_JCR=`echo "$(psql -U $PGUSER  -h $PGHOST -d $PGDATABASE -l | grep jackrabbit | wc -l)"`
-	CHK_SDATA=`echo "$(psql -U $PGUSER  -h $PGHOST -d $PGDATABASE -l | grep sampledata | wc -l)"`
+#	CHK_SDATA=`echo "$(psql -U $PGUSER  -h $PGHOST -d $PGDATABASE -l | grep sampledata | wc -l)"`
 
 	echo "quartz: $CHK_QUARTZ"
 	echo "hibernate: $CHK_HIBERNATE"
 	echo "jcr: $CHK_JCR"
-	echo "sampledata: $CHK_SDATA"
+#	echo "sampledata: $CHK_SDATA"
 
 	cp -r $PENTAHO_HOME/config $PENTAHO_HOME/config_tmp
 
@@ -53,7 +53,7 @@ if [ "$PGHOST" ]; then
 	$PENTAHO_HOME/scripts/replace.sh "@@hibuser@@" "$PGPASSWORD" -path "$PENTAHO_HOME/config_tmp/" -infile
 	$PENTAHO_HOME/scripts/replace.sh "@@jcr_user@@" "$PGPASSWORD" -path "$PENTAHO_HOME/config_tmp/" -infile
 	$PENTAHO_HOME/scripts/replace.sh "@@pentaho_user@@" "$PGPASSWORD" -path "$PENTAHO_HOME/config_tmp/" -infile
-	$PENTAHO_HOME/scripts/replace.sh "awsbiuser" "$PGUSER" -path "$PENTAHO_HOME/config_tmp/" -infile
+#	$PENTAHO_HOME/scripts/replace.sh "awsbiuser" "$PGUSER" -path "$PENTAHO_HOME/config_tmp/" -infile
         if [ "$RDS_HOSTNAME" ]; then
 	 sed -i 's/TABLESPACE = pg_default;/;/g' $PENTAHO_HOME/config_tmp/postgresql/pentaho-server/data/postgresql/*.sql
 	fi
@@ -71,9 +71,9 @@ if [ "$PGHOST" ]; then
 	if [ "$CHK_QUARTZ" -eq "0" ]; then
 	        psql -U $PGUSER -h $PGHOST -d $PGDATABASE -f $PENTAHO_HOME/pentaho-server/data/postgresql/create_quartz_postgresql.sql
 	fi
-	 if [ "$CHK_SDATA" -eq "0" ]; then
-                psql -U $PGUSER -h $PGHOST -d $PGDATABASE -f $PENTAHO_HOME/pentaho-server/data/postgresql/sampledata.sql
-        fi
+#	 if [ "$CHK_SDATA" -eq "0" ]; then
+#                psql -U $PGUSER -h $PGHOST -d $PGDATABASE -f $PENTAHO_HOME/pentaho-server/data/postgresql/sampledata.sql
+#        fi
 
 fi
 
