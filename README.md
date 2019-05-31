@@ -1,20 +1,32 @@
 # description
 
-Launch pentaho 8.2 with psotgresql configured as repository
+Launch pentaho 8.2 with postgresql configured as repository
 
 # Quick start
 
-You can simply start with default configuration
+You need to start postgres
+
 ```
-docker-compose up
+docker run -d --name db \
+    -p 5432:5432 \
+    postgres:10-alpine
 ```
 
-Then you can access pentaho on [http://localhost:18080](http://localhost:18080)
+Then start pentaho
 
+```
+docker run -d --name pentaho \
+    -p 8080:8080 \
+    -e PGPORT=5432 \
+    -e PGDATABASE=postgres \
+    -e PGUSER=pgadmin \
+    -e PGPASSWORD=<secret> \
+    bretif/pentaho:8.2
+```
+
+Then you can access pentaho on [http://locahost:8080](http://locahost:8080)
 
 # Configuration
-
-Edit `.env` to match you envisonment
 
 ## Variables
 
@@ -29,6 +41,8 @@ A lot of thing
 
 - User docker-entrypoint with run-parts
 - Remove by default test user
+- postgres optional parameter
 - different user / password per db
 - Manage URL / host
+- Merge with [https://github.com/zhicwu/docker-biserver-ce](https://github.com/zhicwu/docker-biserver-ce) as really more clean/powerfull
 - ...
