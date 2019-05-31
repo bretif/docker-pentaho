@@ -1,7 +1,6 @@
 FROM openjdk:8-stretch
 
-
-MAINTAINER Wellington Marinho wpmarinho@globo.com
+MAINTAINER Bertrand RETIF bertrand@sudokeys.com
 
 # Init ENV
 ENV BISERVER_VERSION 8.2
@@ -11,12 +10,12 @@ ENV PENTAHO_HOME /opt/pentaho
 
 # Apply JAVA_HOME
 RUN . /etc/environment
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/local/openjdk-8
 ENV PENTAHO_JAVA_HOME $JAVA_HOME
 
 # Install Dependences
 RUN apt-get update; apt-get -y install zip netcat less; \
-    apt-get install wget unzip git postgresql-client-9.6 vim -y; \
+    apt-get install wget unzip git postgresql-client vim -y; \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
 
 RUN mkdir ${PENTAHO_HOME}; useradd -s /bin/bash -d ${PENTAHO_HOME} pentaho; chown pentaho:pentaho ${PENTAHO_HOME}

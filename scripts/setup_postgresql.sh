@@ -1,13 +1,5 @@
 #!/bin/bash
 
-if [ "$RDS_HOSTNAME" ]; then
-	PGHOST="$RDS_HOSTNAME"
-	PGUSER="$RDS_USERNAME"
-	PGPASSWORD="$RDS_PASSWORD"
-	PGDATABASE="$RDS_DB_NAME"
-	PGPORT="$RDS_PORT"
-fi
-
 if [ "$PGHOST" ]; then
 	if [ ! "$PGPORT" ]; then
 	        PGPORT=5432
@@ -19,7 +11,7 @@ if [ "$PGHOST" ]; then
 	        PGUSER=pgadmin
 	fi
 	if [ ! "$PGPASSWORD" ]; then
-	        PGPASSWORD=pgadmin.
+	        PGPASSWORD=pgadmin
 	        
 	fi
 	export PGPASSWORD="$PGPASSWORD"
@@ -54,10 +46,7 @@ if [ "$PGHOST" ]; then
 	$PENTAHO_HOME/scripts/replace.sh "@@jcr_user@@" "$PGPASSWORD" -path "$PENTAHO_HOME/config_tmp/" -infile
 	$PENTAHO_HOME/scripts/replace.sh "@@pentaho_user@@" "$PGPASSWORD" -path "$PENTAHO_HOME/config_tmp/" -infile
 #	$PENTAHO_HOME/scripts/replace.sh "awsbiuser" "$PGUSER" -path "$PENTAHO_HOME/config_tmp/" -infile
-        if [ "$RDS_HOSTNAME" ]; then
-	 sed -i 's/TABLESPACE = pg_default;/;/g' $PENTAHO_HOME/config_tmp/postgresql/pentaho-server/data/postgresql/*.sql
-	fi
-	
+        
 	cp -r $PENTAHO_HOME/config_tmp/postgresql/pentaho-server/* $PENTAHO_HOME/pentaho-server/
 	rm -rf $PENTAHO_HOME/config_tmp
 	
@@ -76,6 +65,3 @@ if [ "$PGHOST" ]; then
 #        fi
 
 fi
-
-
-
