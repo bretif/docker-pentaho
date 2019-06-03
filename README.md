@@ -28,12 +28,28 @@ Then you can access pentaho on [http://locahost:8080](http://locahost:8080)
 
 # Configuration
 
-## Variables
 
+## Variables
+- PGHOST
 - PGPORT
 - PGDATABASE
 - PGUSER
 - PGPASSWORD
+
+## Behind a Proxy / HTTPS
+
+If pentaho is behind a reverse proxy for https, make sure the file `/opt/pentaho/pentaho-server/tomcat/conf/server.xml` look like this : 
+
+```
+    <Connector URIEncoding="UTF-8" port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               scheme="https"
+               proxyPort="443"
+               secure="true"
+               redirectPort="443" />
+
+```
+
 
 # TODO
 
