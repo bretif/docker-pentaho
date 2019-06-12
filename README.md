@@ -17,6 +17,7 @@ Then start pentaho
 ```
 docker run -d --name pentaho \
     -p 8080:8080 \
+    -e PGHOST=localhost \
     -e PGPORT=5432 \
     -e PGDATABASE=postgres \
     -e PGUSER=pgadmin \
